@@ -2,10 +2,11 @@
 //displays all the paths from start to end
 export const findAllPaths = (graph, start, end) => {
     const visitedEdges = new Set();
-  
+    let edgPairCov=[];
     function dfs(node, path) {
       if (node === end) {
         console.log('Path:', path.join(' -> '));
+        edgPairCov.push(path);
         return;
       }
   
@@ -23,6 +24,7 @@ export const findAllPaths = (graph, start, end) => {
     }
   
     dfs(start, [start]);
+    return edgPairCov;
 }
 
 //display all pair of edges

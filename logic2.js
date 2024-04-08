@@ -1,9 +1,11 @@
 function findAllPaths(graph, start, end) {
     const visitedEdges = new Set();
-  
+    let edgPairCov=[];
     function dfs(node, path) {
       if (node === end) {
         console.log('Path:', path.join(' -> '));
+        edgPairCov.push(path);
+        console.log(edgPairCov);
         return;
       }
   

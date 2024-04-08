@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import Criteria from './Criteria';
 import { Button } from 'react-bootstrap';
 import Results from './Results';
+import { findAllPaths } from './Logic';
 
 function DynamicInputFields() {
   const [inputs, setInputs] = useState([{ id: 1, value1: '', value2: '' }]);
   const [selectedOption, setSelectedOption] = useState(null); // for criteria
-  const [firstNode, setFirstNode] = useState(null); //initial
-  const [lastNode, setLastNode] = useState(null); //final
+  const [firstNode, setFirstNode] = useState(""); //initial
+  const [lastNode, setLastNode] = useState(""); //final
   const [finalResults, setFinalResults] = useState(null); //final results
+  const [totalResults,setTotalResults]=useState([]);
   const handleAddInput = () => {
     const newInput = {
       id: inputs.length + 1,
@@ -38,6 +40,24 @@ function DynamicInputFields() {
     console.log(firstNode, lastNode);
     let finalGraph=constructGraph(inputs);
     console.log(finalGraph);
+
+
+
+    if(selectedOption==='edgepairif'){
+      let criteria_method='Edge Pair Coverage Initial to Final'
+      let allEdgePairsInitialtoFinal= findAllPaths(finalGraph,firstNode,lastNode);
+      let outputObj={
+        input_graph:finalGraph,
+        initial_node:firstNode,
+        final_node:lastNode,
+        criteria_method,
+        output:allEdgePairsInitialtoFinal
+      }
+      console.log(outputObj);
+      setFinalResults(outputObj);
+      setTotalResults([...totalResults,outputObj]);
+    }
+
   }
 
   const constructGraph=(inputs)=>{
@@ -51,13 +71,20 @@ function DynamicInputFields() {
 
   return (
     <>
+    <div className='container mt-5'>
+    <div className='row'>
+      <div className='col'>
+        <h2>Graph Edge Pair Coverage</h2>
+      </div>
+    </div>
+    </div>
 
       <div className='container mt-5'>
 
         {inputs.map((input, index) => (
-          <div key={input.id} className='row'>
+          <div key={input.id} className='row mt-1'>
             <div className='col'>
-              Enter Node:
+              Enter Node: &nbsp; 
               <input
                 type="text"
                 name="value1"
@@ -67,7 +94,7 @@ function DynamicInputFields() {
               />
             </div>
             <div className='col'>
-              Enter Neighbours
+              Enter Neighbors: &nbsp;
               <input
                 type="text"
                 name="value2"
@@ -90,6 +117,7 @@ function DynamicInputFields() {
           </div>
         </div>
 
+{/* criteria comp */}
         <div className='row mt-2'>
           <div className='col'>
             <Criteria selectedOption={selectedOption} setSelectedOption={(val) => { setSelectedOption(val) }} />
@@ -98,7 +126,7 @@ function DynamicInputFields() {
         </div>
 
 
-
+{/* initail final node appearance logic */}
         {selectedOption && selectedOption !== 'allep' ?
           <div className='row mt-2'>
             <div className='col'>
@@ -124,6 +152,9 @@ function DynamicInputFields() {
       </div >
       <div className='container mt-5'>
         <Results finalResults={finalResults} />
+      </div>
+      <div className='container mt-5'>
+        {totalResults.length>0? totalResults.map((eachResult,el)=><Results key={el} finalResults={eachResult} />):null}
       </div>
 
     </>
