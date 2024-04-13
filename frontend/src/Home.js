@@ -2,7 +2,7 @@ const Home=()=>{
 
     return(
         <>
-        Home
+        wELCOME TO EDGE PAIR PATH COVERAGE TOOL 
         </>
     )
 }
