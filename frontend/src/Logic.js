@@ -1,5 +1,6 @@
 
 //displays all the paths from start to end
+//edge pair coverage (initial to final)
 export const findAllPaths = (graph, start, end) => {
     const visitedEdges = new Set();
     let edgPairCov=[];
@@ -28,6 +29,7 @@ export const findAllPaths = (graph, start, end) => {
 }
 
 //display all pair of edges
+//edge-pair coverage (all pairs of edges)
 export const findEdgePairs = (graph) => {
     const edgePairs = [];
 
@@ -46,6 +48,7 @@ export const findEdgePairs = (graph) => {
 } 
 
 //displays all edges
+//edge coverage initial to final
 export function displayAllEdges(graph) {
     for (const node in graph) {
         for (const adjacentNode of graph[node]) {
@@ -57,6 +60,7 @@ export function displayAllEdges(graph) {
 
 
 //displays all nodes  
+//node coverage initial to final
 export function getAllNodes(graph) {
     const nodes = new Set();
 

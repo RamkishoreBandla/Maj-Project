@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import Criteria from './Criteria';
 import { Button } from 'react-bootstrap';
 import Results from './Results';
-import { findAllPaths } from './Logic';
+import { findAllPaths, findEdgePairs, getAllNodes } from './Logic';
+import TotalResults from './TotalResults';
 
 function DynamicInputFields() {
   const [inputs, setInputs] = useState([{ id: 1, value1: '', value2: '' }]);
@@ -44,7 +45,10 @@ function DynamicInputFields() {
 
 
     if(selectedOption==='edgepairif'){
-      let criteria_method='Edge Pair Coverage Initial to Final'
+      let criteria_method='Test Path for Edge Pair Coverage Initial to Final'
+
+      
+
       let allEdgePairsInitialtoFinal= findAllPaths(finalGraph,firstNode,lastNode);
       let outputObj={
         input_graph:finalGraph,
@@ -54,7 +58,51 @@ function DynamicInputFields() {
         output:allEdgePairsInitialtoFinal
       }
       console.log(outputObj);
+      setFinalResults(outputObj,"test path edge pair path initial to final");
+      setTotalResults([...totalResults,outputObj]);
+    }
+    else if(selectedOption==='allep'){
+      let criteria_method='All Edge Pairs';
+      let allEdgePairs=findEdgePairs(finalGraph);
+      let outputObj={
+        input_graph:finalGraph,
+        initial_node:null,
+        final_node:null,
+        criteria_method,
+        output:allEdgePairs
+      }
+      console.log(outputObj," all edge pairs");
       setFinalResults(outputObj);
+      setTotalResults([...totalResults,outputObj]);
+    }
+    else if(selectedOption==='nc'){
+      let criteria_method='Test Path for Node Coverage Initial to Final';
+      let node_coverage_result= findAllPaths(finalGraph,firstNode,lastNode);
+        console.log(node_coverage_result," node coverage from function");
+        let outputObj={
+        input_graph:finalGraph,
+        initial_node:firstNode,
+        final_node:lastNode,
+        criteria_method,
+        output:node_coverage_result
+      }
+      console.log(outputObj);
+      setFinalResults(outputObj,"Test Path for Node Coverage Initial to Final");
+      setTotalResults([...totalResults,outputObj]);
+    }
+    else if(selectedOption==='ec'){
+      let criteria_method='Test Path for Edge Coverage Initial to Final';
+      let node_coverage_result= findAllPaths(finalGraph,firstNode,lastNode);
+
+        let outputObj={
+        input_graph:finalGraph,
+        initial_node:firstNode,
+        final_node:lastNode,
+        criteria_method,
+        output:node_coverage_result
+      }
+      console.log(outputObj);
+      setFinalResults(outputObj,"Test Path for Edge Coverage Initial to Final");
       setTotalResults([...totalResults,outputObj]);
     }
 
@@ -63,7 +111,6 @@ function DynamicInputFields() {
   const constructGraph=(inputs)=>{
     let graph={}
     for(let i of inputs){
-      console.log(i);
       graph[i['value1']]=i['value2'].split(",").map(e=>e.trim());
     }
     return graph;
@@ -151,10 +198,12 @@ function DynamicInputFields() {
         </div>
       </div >
       <div className='container mt-5'>
+        <h3>Result</h3>
         <Results finalResults={finalResults} />
       </div>
       <div className='container mt-5'>
-        {totalResults.length>0? totalResults.map((eachResult,el)=><Results key={el} finalResults={eachResult} />):null}
+        <h3>History</h3>
+        {totalResults.length>0? <TotalResults totalResults={totalResults} />:null}
       </div>
 
     </>

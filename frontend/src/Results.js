@@ -19,8 +19,8 @@ const Results = ({ finalResults  }) => {
                                 <th scope="row">1</th>
                                 <td>{JSON.stringify(finalResults.input_graph)}</td>
                                 <td>{finalResults.criteria_method}</td>
-                                <td>{finalResults.initial_node}</td>
-                                <td>{finalResults.final_node}</td>
+                                <td>{finalResults?.initial_node}</td>
+                                <td>{finalResults?.final_node}</td>
                                 <td><ul>{finalResults.output.map((e,i)=><li key={i}>{e.join(', ')}</li>)}</ul></td>
                             </tr>
                         </tbody>
